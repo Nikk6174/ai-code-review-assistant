@@ -1,0 +1,22 @@
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    team: String
+    createdAt: String!
+    lastLogin: String!
+}
+
+type Session {
+    token: String!
+    user: User!
+}
+
+type Query {
+    me: User
+}
+
+type Mutation {
+    login(name: String!, email: String!): Session!
+    logout: Boolean!
+}
