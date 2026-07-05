@@ -2,12 +2,14 @@ import { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ChatArea from '../components/ChatArea';
+import { Menu } from 'lucide-react';
 import gsap from 'gsap';
 import './ChatLayout.css';
 
 export default function ChatLayout() {
   const navigate = useNavigate();
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const emptyStateRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
@@ -30,11 +32,33 @@ export default function ChatLayout() {
 
   return (
     <div className="chat-layout">
+      <button
+        className={`mobile-sidebar-backdrop ${isSidebarOpen ? 'visible' : ''}`}
+        onClick={() => setIsSidebarOpen(false)}
+        aria-label="Close sidebar"
+        type="button"
+      />
       <Sidebar 
         activeSessionId={activeSessionId} 
-        onSelectSession={setActiveSessionId} 
+        onSelectSession={setActiveSessionId}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
       <div className="chat-main">
+        <header className="mobile-chat-header">
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setIsSidebarOpen(true)}
+            aria-label="Open sidebar"
+            type="button"
+          >
+            <Menu size={20} />
+          </button>
+          <div>
+            <span className="mobile-header-kicker">AI Code Review</span>
+            <h1>Review Assistant</h1>
+          </div>
+        </header>
         {activeSessionId ? (
           <ChatArea sessionId={activeSessionId} />
         ) : (

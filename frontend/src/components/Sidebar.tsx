@@ -1,7 +1,7 @@
 import { useState, useRef, useLayoutEffect } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_SESSIONS_QUERY, CREATE_NEW_SESSION_MUTATION } from '../graphql/operations';
-import { Plus, MessageSquare, LogOut, Code2 } from 'lucide-react';
+import { Plus, MessageSquare, LogOut, Code2, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import './Sidebar.css';
@@ -14,9 +14,17 @@ interface Session {
 interface SidebarProps {
   activeSessionId: string | null;
   onSelectSession: (id: string) => void;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export default function Sidebar({ activeSessionId, onSelectSession }: SidebarProps) {
+interface CreateSessionResponse {
+  createNewSession: {
+    sessionId: string;
+  };
+}
+
+export default function Sidebar({ activeSessionId, onSelectSession, isOpen = false, onClose }: SidebarProps) {
   const userId = localStorage.getItem('userId');
   const userName = localStorage.getItem('userName');
   const navigate = useNavigate();
@@ -30,9 +38,10 @@ export default function Sidebar({ activeSessionId, onSelectSession }: SidebarPro
   });
 
   const [createSession] = useMutation(CREATE_NEW_SESSION_MUTATION, {
-    onCompleted: (res: any) => {
+    onCompleted: (res: CreateSessionResponse) => {
       refetch();
       onSelectSession(res.createNewSession.sessionId);
+      onClose?.();
       setIsCreating(false);
     }
   });
@@ -75,12 +84,22 @@ export default function Sidebar({ activeSessionId, onSelectSession }: SidebarPro
     navigate('/login');
   };
 
+  const handleSelectSession = (sessionId: string) => {
+    onSelectSession(sessionId);
+    onClose?.();
+  };
+
   return (
-    <div ref={containerRef} className="sidebar glass-panel">
+    <aside ref={containerRef} className={`sidebar glass-panel ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
-        <div className="sidebar-brand">
-          <Code2 className="brand-icon" size={24} />
-          <span>AI Assistant</span>
+        <div className="sidebar-title-row">
+          <div className="sidebar-brand">
+            <Code2 className="brand-icon" size={24} />
+            <span>AI Assistant</span>
+          </div>
+          <button className="sidebar-close-btn" onClick={onClose} aria-label="Close sidebar" type="button">
+            <X size={18} />
+          </button>
         </div>
         <button 
           className="new-chat-btn" 
@@ -100,7 +119,7 @@ export default function Sidebar({ activeSessionId, onSelectSession }: SidebarPro
             <button
               key={session.sessionId}
               className={`session-item ${activeSessionId === session.sessionId ? 'active' : ''}`}
-              onClick={() => onSelectSession(session.sessionId)}
+              onClick={() => handleSelectSession(session.sessionId)}
             >
               <MessageSquare size={16} />
               <span className="session-title">{session.title}</span>
@@ -118,6 +137,6 @@ export default function Sidebar({ activeSessionId, onSelectSession }: SidebarPro
           <LogOut size={18} />
         </button>
       </div>
-    </div>
+    </aside>
   );
 }

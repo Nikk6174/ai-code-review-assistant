@@ -8,6 +8,16 @@ import LetterGlitch from '../components/LetterGlitch';
 import GlitchText from '../components/GlitchText';
 import './Login.css';
 
+interface LoginResponse {
+  login: {
+    token: string;
+    user: {
+      id: string;
+      name: string;
+    };
+  };
+}
+
 export default function Login() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -60,13 +70,13 @@ export default function Login() {
   }, [isModalOpen, isSignUp]); // Re-animate form fields slightly when switching modes
   
   const [login, { loading }] = useMutation(LOGIN_MUTATION, {
-    onCompleted: (data: any) => {
+    onCompleted: (data: LoginResponse) => {
       localStorage.setItem('token', data.login.token);
       localStorage.setItem('userId', data.login.user.id);
       localStorage.setItem('userName', data.login.user.name);
       navigate('/chat');
     },
-    onError: (err: any) => {
+    onError: (err: Error) => {
       setError(err.message || 'An error occurred during authentication');
     }
   });

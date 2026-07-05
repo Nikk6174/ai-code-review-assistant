@@ -1,8 +1,8 @@
 .landing-layout {
   position: relative;
-  min-height: 100vh;
-  width: 100vw;
-  background-color: var(--bg-primary);
+  min-height: 100dvh;
+  width: 100%;
+  background-color: var(--bg-base);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -73,6 +73,7 @@
   align-items: center;
   text-align: center;
   max-width: 800px;
+  width: min(100%, 800px);
   padding: 2rem;
   margin-top: 2rem;
 }
@@ -145,6 +146,7 @@
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  overflow-y: auto;
 }
 
 .modal-card {
@@ -161,6 +163,8 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(99, 102, 241, 0.2);
   position: relative;
+  max-height: calc(100dvh - 3rem);
+  overflow-y: auto;
 }
 
 .modal-card::before {
@@ -331,7 +335,130 @@
 }
 
 @media (max-width: 640px) {
+  .landing-layout {
+    justify-content: flex-start;
+    padding: 5.5rem 1rem 2rem;
+    overflow-y: auto;
+  }
+
+  .top-right-actions {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    justify-content: flex-end;
+  }
+
+  .nav-btn {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.82rem;
+  }
+
+  .centered-hero {
+    flex: 1;
+    justify-content: center;
+    padding: 1rem 0;
+    margin-top: 0;
+    min-height: calc(100dvh - 7.5rem);
+  }
+
+  .hero-logo {
+    width: 76px;
+    height: 76px;
+    margin-bottom: 1.5rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .hero-logo svg {
+    width: 42px;
+    height: 42px;
+  }
+
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2.45rem;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    line-height: 1.55;
+    margin-bottom: 2rem;
+  }
+
+  .cta-button {
+    width: min(100%, 280px);
+    justify-content: center;
+    padding: 0.85rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0.75rem;
+  }
+
+  .modal-card {
+    max-width: none;
+    max-height: calc(100dvh - 1.5rem);
+    padding: 2.5rem 1.25rem 1.5rem;
+    border-radius: var(--radius-lg);
+    gap: 1.35rem;
+  }
+
+  .login-header h1 {
+    font-size: 1.45rem;
+  }
+
+  .subtitle,
+  .toggle-mode p {
+    font-size: 0.85rem;
+  }
+
+  .input-group input,
+  .login-button {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 380px) {
+  .landing-layout {
+    padding-inline: 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 2.1rem;
+  }
+
+  .top-right-actions {
+    right: 0.75rem;
+    left: 0.75rem;
+  }
+
+  .nav-btn {
+    padding-inline: 0.75rem;
+  }
+}
+
+@media (max-height: 620px) and (max-width: 640px) {
+  .landing-layout {
+    padding-top: 4.75rem;
+  }
+
+  .centered-hero {
+    min-height: auto;
+  }
+
+  .hero-logo {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    margin-bottom: 1.25rem;
   }
 }
